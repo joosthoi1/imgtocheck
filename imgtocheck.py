@@ -1,7 +1,11 @@
 from gridcreation_class import grid
 import cv2
 import time
-image=cv2.imread('C:\\Users\\joosty\\Desktop\\python\\gamepie\\imagetocheckbox\\unknown3.png', cv2.IMREAD_UNCHANGED)
+path = 'C:\\Users\\joosty\\Desktop\\python\\gamepie\\imagetocheckbox\\images\\unknown3.png'
+if path.split('.')[1] == 'png':
+    image=cv2.imread(path, cv2.IMREAD_UNCHANGED)
+else:
+    image=cv2.imread(path)
 y=image.shape[0]
 x=image.shape[1]
 maxx, maxy = 69, 41
