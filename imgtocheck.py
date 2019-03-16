@@ -1,7 +1,7 @@
 from gridcreation_class import grid
 import cv2
 import time
-image=cv2.imread('gamepie/imagetocheckbox/unknown.png')
+image=cv2.imread('C:\\Users\\joosty\\Desktop\\python\\gamepie\\imagetocheckbox\\unknown3.png', cv2.IMREAD_UNCHANGED)
 y=image.shape[0] #length in first dimension
 x=image.shape[1]
 maxx, maxy = 69, 41
@@ -22,6 +22,8 @@ def colorin():
     x, y =1,1
     for i in grid1.mylist:
         mycolor = '#%02x%02x%02x' % (resized[y-1][x-1][2], resized[y-1][x-1][1], resized[y-1][x-1][0])
+        if list(resized[y-1][x-1]) == [0,0,0,0]:
+            mycolor = 'white'
         grid1.mylist[grid1.coords(x, grid1.numbery-(y-1))].configure(bg=mycolor,fg=mycolor)
         grid1.mylist[grid1.coords(x, grid1.numbery-(y-1))].configure(state='disabled')
         #grid1.mylist[grid1.coords(x, grid1.numbery-y)].select()
