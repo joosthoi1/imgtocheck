@@ -1,23 +1,22 @@
 from gridcreation_class import grid
 import cv2
 import time
-image=cv2.imread('gamepie/imagetocheckbox/em.jpg')
+image=cv2.imread('gamepie/imagetocheckbox/unknown.png')
 y=image.shape[0] #length in first dimension
 x=image.shape[1]
-print(x/y)
 maxx, maxy = 69, 41
 def downscale(x, y):
     newx,newy =x,y
     while 1:
-        newy-=1
-        newx-=x/y
         if (int(newx) <= maxx and newy < maxy):
 
             return int(newx), newy
-        #print(newx,newy)
+        newy-=1
+        newx-=x/y
 newx, newy = downscale(x,y)
 resized = cv2.resize(image,(newx,newy))
 grid1 = grid(newx-1, newy-1)
+grid1.master.title('art')
 
 def colorin():
     x, y =1,1
