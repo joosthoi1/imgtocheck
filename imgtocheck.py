@@ -2,7 +2,7 @@ from gridcreation_class import grid
 import cv2
 import time
 image=cv2.imread('C:\\Users\\joosty\\Desktop\\python\\gamepie\\imagetocheckbox\\unknown3.png', cv2.IMREAD_UNCHANGED)
-y=image.shape[0] #length in first dimension
+y=image.shape[0]
 x=image.shape[1]
 maxx, maxy = 69, 41
 def downscale(x, y):
