@@ -1,20 +1,21 @@
 from gridcreation import grid
-from tkinter import *
+import tkinter as tk
 import cv2
-import time
-import math
+import argparse
 
 
 class main:
-    def __init__(self, root):
-        path = 'C:\\Users\\gebruiker\\Desktop\\python\\gamepie\\imagetocheckbox\\images\\Mona_Lisa1.jpg'  # path to image
-        if path.split('.')[1] == 'png':  # checks if its a png since png's need special treatment
+    def __init__(self, root, path, enable_checkboxes):
+        self._enable_checkboxes = enable_checkboxes
+
+        if path.endswith('png'):
             image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
         else:
             image = cv2.imread(path)
-        self.y = image.shape[0]  # gets images x and y values
+        self.y = image.shape[0]
         self.x = image.shape[1]
-        self.maxx, self.maxy = 69, 41  # maximum amount of checkboxes on x and y axis numbers which I found to be the best fit for a 1080p monitor
+        # maximum amount of checkboxes on x and y axis numbers which I found to be the best fit for a 1080p monitor
+        self.maxx, self.maxy = 69, 41
 
         self.downscale()
 
@@ -27,7 +28,8 @@ class main:
 
     def downscale(self):
         self.newx, self.newy = self.x, self.y
-        while 1:    # loops and changes the y value by 1 and the x value by the relative x/y until it fits in the pre astablished 69x41 area
+        # Changes the y value by 1 and the x value by the relative x/y until it fits in the pre-established 69x41 area
+        while 1:
             if (int(self.newx) <= self.maxx and self.newy <= self.maxy):
                 self.newx = int(self.newx)
                 break
@@ -37,19 +39,36 @@ class main:
     def colorin(self):              # grabs the color of each pixel and modifies the checkboxes to be that color
         x, y = 1, 1
         for i in self.grid1.boxlist:
-            mycolor = '#%02x%02x%02x' % (self.resized[y-1][x-1][2], self.resized[y-1][x-1][1], self.resized[y-1][x-1][0])  # converts rgb to hex
+            # convert rgb to hex
+            mycolor = '#%02x%02x%02x' % (self.resized[y-1][x-1][2], self.resized[y-1][x-1][1], self.resized[y-1][x-1][0])
             if list(self.resized[y-1][x-1]) == [0, 0, 0, 0]:
                 mycolor = 'white'
             self.grid1.boxlist[self.grid1.coords(x, self.grid1.numbery - (y - 1))].configure(bg=mycolor, fg=mycolor)
-            self.grid1.boxlist[self.grid1.coords(x, self.grid1.numbery - (y - 1))].configure(state='disabled')  # disables checkboxes to get more color, remove/comment this line to make them checkable
-#            self.grid1.boxlist[self.grid1.coords(x, self.grid1.numbery-(y-1))].select() #selects checkboxes to get more color, remove/comment this line to make them checkable
+
+            # Disabled checkboxes allow more color through but are less fun to click.
+            if self._enable_checkboxes:
+                self.grid1.boxlist[self.grid1.coords(x, self.grid1.numbery-(y-1))].select()
+            else:
+                self.grid1.boxlist[self.grid1.coords(x, self.grid1.numbery - (y - 1))].configure(state='disabled')
             x += 1
             if x == self.newx:
                 y += 1
                 x = 1
             if y == self.newy:
                 break
+
+
+def get_args():
+    parser = argparse.ArgumentParser(description='imgtocheck yo')
+    parser.add_argument('-i', '--image', type=str, default='em.png', help='Image to Checkify')
+    parser.add_argument('-e', '--enable_checkboxes', action='store_true', default=False, help='Enable checkboxes or not.')
+    args = parser.parse_args()
+
+    return args
+
+
 if __name__ == "__main__":
-    root = Tk()
-    gui = main(root)
+    args = get_args()
+    root = tk.Tk()
+    gui = main(root, path=args.image, enable_checkboxes=args.enable_checkboxes)
     gui.grid1.root.mainloop()
